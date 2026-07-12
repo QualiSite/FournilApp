@@ -72,7 +72,7 @@ pourquoi dans les notes.`;
 
 const CLASSIFY_TOOL: Anthropic.Tool = {
   name: 'report_classification',
-  description: "Rapporte le rôle probable de chaque feuille du classeur.",
+  description: 'Rapporte le rôle probable de chaque feuille du classeur.',
   input_schema: {
     type: 'object',
     properties: {
@@ -119,10 +119,8 @@ export async function classifyWorkbook(wb: XLSX.WorkBook): Promise<SheetClassifi
     ],
   });
 
-  const toolUse = response.content.find(
-    (b): b is Anthropic.ToolUseBlock => b.type === 'tool_use'
-  );
-  if (!toolUse) throw new Error("Réponse IA inattendue : pas de classification retournée.");
+  const toolUse = response.content.find((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use');
+  if (!toolUse) throw new Error('Réponse IA inattendue : pas de classification retournée.');
 
   const parsed = toolUse.input as { sheets: SheetClassification[] };
   return parsed.sheets;

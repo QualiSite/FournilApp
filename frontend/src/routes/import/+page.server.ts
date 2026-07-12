@@ -110,7 +110,7 @@ export const actions: Actions = {
         headers: token ? { authorization: `Bearer ${token}` } : undefined,
       });
     } catch {
-      return fail(502, { error: "Analyse IA indisponible (API injoignable)." });
+      return fail(502, { error: 'Analyse IA indisponible (API injoignable).' });
     }
 
     const json = await res.json().catch(() => null);

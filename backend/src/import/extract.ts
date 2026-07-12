@@ -156,8 +156,7 @@ export function extractModel(wb: XLSX.WorkBook, overrides?: ExtractOverrides): I
   report.ok.push(`${produits.length} produits, ${sections.length} pâtes (${sections.join(', ')})`);
 
   /* --- Feuille des poids unitaires --- */
-  const poidsName =
-    overrides?.poidsSheet ?? sheetNames.find((s) => normalize(s).includes('poid'));
+  const poidsName = overrides?.poidsSheet ?? sheetNames.find((s) => normalize(s).includes('poid'));
   const poidsRows =
     poidsName && sheetNames.includes(poidsName) ? sheetToRows(wb.Sheets[poidsName]) : [];
   const poidsList: { nom: string; pate: number; garniture: number }[] = [];
