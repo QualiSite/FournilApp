@@ -33,7 +33,7 @@ import { prisma } from './db.js';
 import { extractModel, validateImport } from './import/extract.js';
 import { applyImport } from './services/importer.js';
 import { fichesDuJour } from './domain/production.js';
-import { verifyPassword } from './auth/password.js';
+import { verifyPassword, DUMMY_PASSWORD_HASH } from './auth/password.js';
 import { createSession, deleteSession } from './auth/session.js';
 import { requireAuth } from './middleware/require-auth.js';
 import { classifyWorkbook } from './ai/classify-workbook.js';
@@ -106,7 +106,10 @@ app.post(
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
-    const ok = user ? await verifyPassword(user.password, password) : false;
+    // On appelle toujours verifyPassword, même si l'utilisateur n'existe pas
+    // (contre un hash leurre), pour que le temps de réponse ne révèle pas
+    // quels emails ont un compte (voir DUMMY_PASSWORD_HASH).
+    const ok = await verifyPassword(user?.password ?? DUMMY_PASSWORD_HASH, password);
     if (!user || !ok) {
       res.status(401).json({ error: 'Identifiants invalides' });
       return;
